@@ -1,36 +1,25 @@
 def _pre_to_inf(symb, text):
-    if symb in ['+', '-', '*', '/']:
+    if symb in ['+', '-', '*', '/', '**']:
         left = text.pop ()
         right = text.pop ()
         text.append ('(%s %s %s)' % (left, symb, right))
-    elif symb == '!':
-       c = text.pop ()
-       text.append('%s!' % (op) )
-    elif symb in ['sin', 'cos', 'tan']:
-       c = text.pop ()
-       text.append('%s(%s)' % (symb,c))
     else:
        text.append(symb)
 
 def pre_to_inf(a_list):
     text = []
     a_list.reverse ()
+
     for i in a_list:
         _pre_to_inf(i, text)
     return text.pop()
 
 
 def _post_to_inf(symb,text):
-    if symb in ['+', '-', '*', '/']:
+    if symb in ['+', '-', '*', '/', '**']:
         left = text.pop ()
         right = text.pop ()
-        text.append ('(%s %s %s)' % (left, symb, right))
-    elif symb == '!':
-       c = text.pop ()
-       text.append('%s!' % c )
-    elif symb in ['sin', 'cos', 'tan']:
-       c = text.pop ()
-       text.append('%s(%s)' % (symb,c))
+        text.append ('(%s %s %s)' % (right, symb, left))
     else:
        text.append(symb)
 
@@ -39,7 +28,8 @@ def post_to_inf(a_list):
     text = []
     for i in a_list:
         _post_to_inf(i, text)
-    return text.pop()
+
+    return text[0]
 
 def main():
 
@@ -61,18 +51,23 @@ def main():
         else:
             if ch == 1:
                 a = input('Введите выражение в инфиксной форме: ')
+                a = a.replace("^", "**")
+                print(a)
 
             elif ch == 2:
                 a = input('Введите выражение в префиксной форме (вводить нужно через пробел): ')
+                a = a.replace("^", "**")
                 a_list = a.split(' ')
 
                 a = pre_to_inf(a_list)
 
             elif ch == 3:
                 a = input('Введите выражение в постфиксной форме: ')
+                a = a.replace("^", "**")
                 a_list = a.split(' ')
-
                 a = post_to_inf(a_list)
+
+
 
             elif ch == 4:
                 result = eval(a)
